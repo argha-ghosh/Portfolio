@@ -18,6 +18,10 @@
     --moss: #5B6B4E;
     --line: #D8D4C7;
     --surface: #FFFFFF;
+    --card-dark: #20242B;
+    --card-dark-ink: #EDEBE3;
+    --card-dark-soft: #A7ACB3;
+    --card-dark-line: #33383F;
     --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
     --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     padding-top: env(safe-area-inset-top, 0px);
@@ -48,7 +52,7 @@
     --line: #33383F;
     --surface: #1B1E23;
   }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
+  html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 76px); scroll-behavior: smooth; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -61,7 +65,7 @@
   }
   a { color: inherit; }
   .wrap {
-    max-width: 1080px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 0 32px;
   }
@@ -83,33 +87,62 @@
     align-items: center;
     justify-content: space-between;
     padding: 18px 0;
+    gap: 20px;
   }
   .topnav .mark {
     font-family: var(--font-display);
     font-size: 1.15rem;
     font-weight: 600;
     letter-spacing: 0.01em;
+    text-decoration: none;
+    white-space: nowrap;
   }
-  .topnav nav { display: flex; gap: 28px; }
+  .topnav nav { display: flex; gap: 24px; flex-wrap: wrap; }
   .topnav nav a {
+    position: relative;
     text-decoration: none;
     color: var(--ink-soft);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    border-bottom: 1px solid transparent;
-    padding-bottom: 2px;
-    transition: color .15s, border-color .15s;
+    padding-bottom: 3px;
   }
-  .topnav nav a:hover { color: var(--ink); border-color: var(--rust); }
+  .topnav nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--rust);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s ease;
+  }
+  .topnav nav a:hover,
+  .topnav nav a:focus-visible { color: var(--ink); }
+  .topnav nav a:hover::after,
+  .topnav nav a:focus-visible::after { transform: scaleX(1); }
+  @media (max-width: 860px) {
+    .topnav nav { gap: 14px; }
+    .topnav nav a { font-size: 0.8rem; }
+  }
   @media (max-width: 640px) {
-    .topnav nav { gap: 16px; }
-    .topnav nav a { font-size: 0.82rem; }
+    .topnav { flex-direction: column; align-items: flex-start; gap: 12px; }
   }
 
   /* ---------- Hero ---------- */
   .hero {
     padding: 76px 0 64px;
     border-bottom: 1px solid var(--line);
+  }
+  .hero h1 { animation: heroUp .7s ease both; }
+  .hero .role { animation: heroUp .7s ease .08s both; }
+  .hero p.lede { animation: heroUp .7s ease .16s both; }
+  .hero-links { animation: heroUp .7s ease .12s both; }
+  .stats-row { animation: heroUp .7s ease .26s both; }
+  @keyframes heroUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .hero-grid {
     display: grid;
@@ -194,6 +227,13 @@
     font-size: 0.98rem;
     max-width: 56ch;
   }
+  .section-head .sub-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.08rem;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
   @media (max-width: 720px) {
     .section-head { grid-template-columns: 1fr; gap: 10px; }
   }
@@ -210,80 +250,29 @@
     .about-body { grid-template-columns: 1fr; }
   }
 
-  /* ---------- Projects ---------- */
-  .project {
+  /* ---------- Education / Certs ---------- */
+  .edu-item, .cert-item {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 32px;
-    padding: 40px 0;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    padding: 16px 0;
     border-top: 1px solid var(--line);
   }
-  .project:first-of-type { border-top: none; padding-top: 0; }
-  .project-tag {
-    font-size: 0.85rem;
+  .edu-item:first-child, .cert-item:first-child { border-top: none; }
+  .edu-item .school, .cert-item .cname {
     font-weight: 700;
-    color: var(--rust);
+    font-size: 1.02rem;
   }
-  .project-tag.deep { color: var(--moss); }
-  .project h3 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 6px 0 4px;
-  }
-  .project .role-line {
-    font-size: 0.92rem;
+  .edu-item .degree, .cert-item .cdetail {
     color: var(--ink-soft);
-    margin-bottom: 18px;
+    font-size: 0.94rem;
+    margin-top: 3px;
   }
-  @media (max-width: 720px) {
-    .project { grid-template-columns: 1fr; gap: 18px; }
-  }
-
-  .project-body {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 32px;
-    align-items: start;
-  }
-  .project-body.narrow { grid-template-columns: 1fr; }
-  @media (max-width: 880px) {
-    .project-body { grid-template-columns: 1fr; }
-  }
-  .project-desc p { margin: 0 0 14px; color: var(--ink-soft); }
-  .project-desc ul {
-    margin: 14px 0 18px;
-    padding-left: 18px;
-  }
-  .project-desc li {
-    margin-bottom: 7px;
+  .edu-item .when, .cert-item .when {
     color: var(--ink-soft);
-  }
-  .tech-line {
     font-size: 0.88rem;
-    color: var(--ink-soft);
-  }
-  .tech-line b { color: var(--ink); font-weight: 700; }
-  .project-links { margin-top: 14px; }
-  .project-links a {
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--line);
-  }
-  .project-links a:hover { border-color: var(--ink); }
-
-  .stack-diagram { width: 100%; height: auto; }
-  .stack-diagram .layer-label {
-    font-family: var(--font-body);
-    font-size: 10.5px;
-    font-weight: 700;
-    fill: var(--ink);
-  }
-  .stack-diagram .layer-sub {
-    font-family: var(--font-body);
-    font-size: 9px;
-    fill: var(--ink-soft);
+    white-space: nowrap;
+    text-align: right;
   }
 
   /* ---------- Skills ---------- */
@@ -310,29 +299,143 @@
     background: var(--surface);
   }
 
-  /* ---------- Education / Certs ---------- */
-  .edu-item, .cert-item {
+  /* ---------- Projects: dark screenshot-forward cards ---------- */
+  .projects-grid {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 20px;
-    padding: 16px 0;
-    border-top: 1px solid var(--line);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
-  .edu-item:first-child, .cert-item:first-child { border-top: none; }
-  .edu-item .school, .cert-item .cname {
+  @media (max-width: 980px) {
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 680px) {
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--card-dark-ink);
+    background: var(--card-dark);
+    border: 1px solid var(--card-dark-line);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .project-card:hover,
+  .project-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px -14px rgba(0,0,0,0.45);
+    border-color: var(--rust);
+  }
+  .project-media {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2a3444, #1a1e26);
+  }
+  .project-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease;
+  }
+  .project-card:hover .project-media img,
+  .project-card:focus-visible .project-media img {
+    transform: scale(1.05);
+  }
+  .project-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(32,36,43,0) 55%, var(--card-dark) 100%);
+  }
+  /* Placeholder look for project-media--placeholder until a real screenshot is added */
+  .project-media--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .placeholder-label {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
     font-weight: 700;
-    font-size: 1.02rem;
+    color: var(--card-dark-soft);
+    border: 1px dashed var(--card-dark-line);
+    padding: 8px 14px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
   }
-  .edu-item .degree, .cert-item .cdetail {
-    color: var(--ink-soft);
-    font-size: 0.94rem;
-    margin-top: 3px;
+  .project-content {
+    padding: 20px 22px 24px;
   }
-  .edu-item .when, .cert-item .when {
+  .project-eyebrow {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--rust);
+    margin-bottom: 8px;
+  }
+  .project-eyebrow.deep { color: var(--moss); }
+  .project-content h3 {
+    font-family: var(--font-display);
+    font-size: 1.28rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--card-dark-ink);
+  }
+  .project-content p {
+    font-size: 0.92rem;
+    color: var(--card-dark-soft);
+    margin: 0 0 16px;
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .project-tags span {
+    font-size: 0.76rem;
+    padding: 5px 11px;
+    border-radius: 20px;
+    border: 1px solid var(--card-dark-line);
+    background: #262B33;
+    color: var(--card-dark-soft);
+  }
+
+  /* ---------- Achievements ---------- */
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 780px) { .achievements-grid { grid-template-columns: 1fr; } }
+  .achieve-card {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 22px 20px;
+    background: var(--surface);
+  }
+  .achieve-card .a-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 0 0 6px;
+  }
+  .achieve-card .a-org {
+    color: var(--steel);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin: 0 0 10px;
+  }
+  .achieve-card .a-detail {
     color: var(--ink-soft);
-    font-size: 0.88rem;
-    white-space: nowrap;
-    text-align: right;
+    font-size: 0.9rem;
+    margin: 0;
   }
 
   /* ---------- Footer ---------- */
@@ -363,8 +466,24 @@
   .footer-links a:hover { border-color: var(--ink); }
   .footer-meta { color: var(--ink-soft); font-size: 0.85rem; text-align: right; }
 
+  /* ---------- Scroll reveal (project & achievement cards) ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
+    .project-card { transition: none; }
+    .project-card:hover, .project-card:focus-visible { transform: none; }
+    .project-media img, .project-card:hover .project-media img { transition: none; transform: none; }
+    .hero h1, .hero .role, .hero p.lede, .hero-links, .stats-row { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
   }
 </style>
 </head>
@@ -372,17 +491,20 @@
 
 <header class="top">
   <div class="wrap topnav">
-    <div class="mark">Argha Ghosh</div>
+    <a class="mark" href="#home">Argha Ghosh</a>
     <nav>
-      <a href="#work">Work</a>
-      <a href="#skills">Skills</a>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
       <a href="#education">Education</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#achievements">Achievements</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" id="home">
   <div class="wrap">
     <div class="hero-grid">
       <div>
@@ -421,128 +543,33 @@
   </div>
 </section>
 
-<section id="work">
+<section id="education">
   <div class="wrap">
     <div class="section-head">
-      <h2>Selected work</h2>
-      <p class="note">Four full-stack projects, each built solo from database to UI. Source code for all of them is on GitHub.</p>
+      <h2>Education &amp; certifications</h2>
+      <p class="note"></p>
     </div>
-
-    <!-- Project 1: Zero Hunger — deep dive -->
-    <div class="project">
+    <div class="edu-item">
       <div>
-        <div class="project-tag deep">Deep dive</div>
+        <div class="school">American International University-Bangladesh</div>
+        <div class="degree">Bachelor of Science in Computer Science · CGPA 3.05</div>
       </div>
-      <div>
-        <h3>Zero Hunger — Food Donation &amp; Redistribution Platform</h3>
-        <div class="role-line">Full-stack · solo project</div>
-        <div class="project-body">
-          <div class="project-desc">
-            <p>A management system connecting restaurants, collection staff, and distribution activity to route surplus food to people who need it, instead of a landfill.</p>
-            <ul>
-              <li>Built the API in ASP.NET Core Web API, with full CRUD across restaurants, food items, employees, collection requests, and distributions.</li>
-              <li>Modeled the relational data in Entity Framework Core — restaurants to foods to collection requests to distributions — and wrote LINQ queries for custom retrieval logic.</li>
-              <li>Added restaurant-wise food lookups that account for preservation time and per-request quantities, so collection staff know what's actually still good to pick up.</li>
-              <li>Validated every input with DTOs and Data Annotations, and used AutoMapper to keep entity-to-DTO mapping consistent across the API.</li>
-            </ul>
-            <p class="tech-line"><b>Stack:</b> C#, ASP.NET Core Web API, Entity Framework Core, LINQ, Microsoft SQL Server, AutoMapper, RESTful APIs, DTOs</p>
-            <div class="project-links"><a href="https://github.com/argha-ghosh/Zero-Hunger" target="_blank" rel="noopener">View source</a></div>
-          </div>
-          <svg class="stack-diagram" viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="10" width="240" height="52" rx="3" fill="none" stroke="var(--steel)" stroke-width="1.5"/>
-            <text x="24" y="32" class="layer-label">Frontend clients</text>
-            <text x="24" y="47" class="layer-sub">Admin &amp; staff consumers of the API</text>
-            <rect x="10" y="74" width="240" height="62" rx="3" fill="none" stroke="var(--rust)" stroke-width="1.5"/>
-            <text x="24" y="97" class="layer-label">ASP.NET Core Web API</text>
-            <text x="24" y="112" class="layer-sub">DTOs · Data Annotations · AutoMapper</text>
-            <text x="24" y="126" class="layer-sub">Restaurants · Food · Collection · Distribution</text>
-            <rect x="10" y="148" width="240" height="42" rx="3" fill="none" stroke="var(--moss)" stroke-width="1.5"/>
-            <text x="24" y="167" class="layer-label">Microsoft SQL Server</text>
-            <text x="24" y="181" class="layer-sub">EF Core + LINQ, relational schema</text>
-          </svg>
-        </div>
-      </div>
+      <div class="when">Jan 2023 – Present</div>
     </div>
-
-    <!-- Project 2: Dhaka Road & Drainage -->
-    <div class="project">
+    <div class="edu-item">
       <div>
-        <div class="project-tag">Full stack</div>
+        <div class="school">Azizul Haque College, Bogra</div>
+        <div class="degree">Higher Secondary Certificate, Science · GPA 5.0</div>
       </div>
-      <div>
-        <h3>Dhaka Road &amp; Drainage Issue Reporting</h3>
-        <div class="role-line">Full-stack · solo project</div>
-        <div class="project-body">
-          <div class="project-desc">
-            <p>An SEO-friendly reporting tool that lets city residents flag road and drainage problems, built with a responsive interface and proper session security.</p>
-            <ul>
-              <li>Handled signup and login with bcrypt password hashing, plus JWT authentication for protected routes and session management.</li>
-              <li>Added OTP-based password reset delivered over email via Node Mailer, for the "forgot password" case.</li>
-              <li>Designed RESTful APIs for authentication, authorization, and the report data flow, with Tailwind CSS handling responsive layout across devices.</li>
-            </ul>
-            <p class="tech-line"><b>Stack:</b> TypeScript, NestJS, React.js, Next.js, Tailwind CSS, PostgreSQL, TypeORM, JWT, Bcrypt, Node Mailer</p>
-            <div class="project-links"><a href="https://github.com/argha-ghosh/Complain-Managment-System-Frontend-Backend-" target="_blank" rel="noopener">View source</a></div>
-          </div>
-          <svg class="stack-diagram" viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="10" width="240" height="52" rx="3" fill="none" stroke="var(--steel)" stroke-width="1.5"/>
-            <text x="24" y="32" class="layer-label">React.js + Next.js</text>
-            <text x="24" y="47" class="layer-sub">Tailwind CSS, responsive layout</text>
-            <rect x="10" y="74" width="240" height="52" rx="3" fill="none" stroke="var(--rust)" stroke-width="1.5"/>
-            <text x="24" y="97" class="layer-label">NestJS (TypeScript)</text>
-            <text x="24" y="112" class="layer-sub">JWT auth · Bcrypt · Node Mailer OTP</text>
-            <rect x="10" y="138" width="240" height="52" rx="3" fill="none" stroke="var(--moss)" stroke-width="1.5"/>
-            <text x="24" y="161" class="layer-label">PostgreSQL</text>
-            <text x="24" y="176" class="layer-sub">via TypeORM</text>
-          </svg>
-        </div>
-      </div>
+      <div class="when">2021</div>
     </div>
-
-    <!-- Project 3: GoZayan -->
-    <div class="project">
+    <div class="cert-item">
       <div>
-        <div class="project-tag">Full stack</div>
+        <div class="cname">IT Essentials</div>
+        <div class="cdetail">Cisco Networking Academy · 70 hours</div>
       </div>
-      <div>
-        <h3>GoZayan — Flight Booking System</h3>
-        <div class="role-line">Full-stack · solo project</div>
-        <div class="project-body narrow">
-          <div class="project-desc">
-            <p>A multi-role flight reservation system covering search, booking, cancellation, and passenger management, with role-based access for admins, airline managers, and passengers.</p>
-            <ul>
-              <li>Built flight scheduling, seat availability, pricing, and booking-status tracking for airlines.</li>
-              <li>Structured a MySQL database for users, airlines, flights, schedules, bookings, and passengers.</li>
-              <li>Generated e-tickets with QR codes for check-in verification.</li>
-            </ul>
-            <p class="tech-line"><b>Stack:</b> HTML5, CSS3, JavaScript, PHP, MySQL, AJAX, JSON</p>
-            <div class="project-links"><a href="https://github.com/argha-ghosh/Online-flight-ticket-booking-system" target="_blank" rel="noopener">View source</a></div>
-          </div>
-        </div>
-      </div>
+      <div class="when">Jan – May 2023</div>
     </div>
-
-    <!-- Project 4: BHOJ -->
-    <div class="project">
-      <div>
-        <div class="project-tag">Desktop app</div>
-      </div>
-      <div>
-        <h3>BHOJ — Restaurant &amp; Food Management</h3>
-        <div class="role-line">Desktop application (Windows Forms) · solo project</div>
-        <div class="project-body narrow">
-          <div class="project-desc">
-            <p>A Windows Forms desktop application for managing restaurant food collection and distribution, built to streamline surplus tracking outside a browser.</p>
-            <ul>
-              <li>Built RESTful APIs and CRUD functionality for restaurants, employees, food items, and collection/distribution records.</li>
-              <li>Designed a relational schema in Entity Framework Core for storage, retrieval, and relationships across entities.</li>
-            </ul>
-            <p class="tech-line"><b>Stack:</b> C#, .NET 8.2, Microsoft SQL Server, Entity Framework Core</p>
-            <div class="project-links"><a href="https://github.com/argha-ghosh/BHOJ" target="_blank" rel="noopener">View source</a></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
@@ -595,32 +622,130 @@
   </div>
 </section>
 
-<section id="education">
+<section id="projects">
   <div class="wrap">
     <div class="section-head">
-      <h2>Education &amp; certifications</h2>
-      <p class="note"></p>
+      <h2>Selected work</h2>
+      <p class="note">Four full-stack projects, each built solo from database to UI. Click a card to open its repository.</p>
     </div>
-    <div class="edu-item">
-      <div>
-        <div class="school">American International University-Bangladesh</div>
-        <div class="degree">Bachelor of Science in Computer Science · CGPA 3.05</div>
-      </div>
-      <div class="when">Jan 2023 – Present</div>
+
+    <div class="projects-grid">
+
+      <!-- Project 1: Zero Hunger — deep dive
+           TO ADD YOUR OWN SCREENSHOT: replace the whole .project-media block below
+           (the one with class "project-media--placeholder") with:
+           <div class="project-media"><img src="images/zero-hunger.png" alt="Zero Hunger dashboard screenshot"></div>
+      -->
+      <a class="project-card" href="https://github.com/argha-ghosh/Zero-Hunger" target="_blank" rel="noopener">
+        <div class="project-media project-media--placeholder">
+          <span class="placeholder-label">Add Zero Hunger screenshot</span>
+        </div>
+        <div class="project-content">
+          <div class="project-eyebrow deep">Full-Stack Web Platform</div>
+          <h3>Zero Hunger</h3>
+          <p>Food donation &amp; redistribution system in ASP.NET Core Web API with EF Core, routing restaurant surplus to collection staff and distributions with full CRUD and DTO-validated endpoints.</p>
+          <div class="project-tags">
+            <span>C#</span><span>ASP.NET Core</span><span>EF Core</span><span>SQL Server</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 2: Dhaka Road & Drainage
+           TO ADD YOUR OWN SCREENSHOT: replace the placeholder .project-media block with:
+           <div class="project-media"><img src="images/road-drainage.png" alt="Road and drainage reporting app screenshot"></div>
+      -->
+      <a class="project-card" href="https://github.com/argha-ghosh/Complain-Managment-System-Frontend-Backend-" target="_blank" rel="noopener">
+        <div class="project-media project-media--placeholder">
+          <span class="placeholder-label">Add Road &amp; Drainage screenshot</span>
+        </div>
+        <div class="project-content">
+          <div class="project-eyebrow">Full-Stack Web App</div>
+          <h3>Road &amp; Drainage Reporting</h3>
+          <p>City issue-reporting tool built with NestJS and Next.js, with JWT auth, bcrypt-hashed passwords, and OTP-based password reset delivered over email.</p>
+          <div class="project-tags">
+            <span>NestJS</span><span>Next.js</span><span>PostgreSQL</span><span>TypeORM</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 3: GoZayan
+           TO ADD YOUR OWN SCREENSHOT: replace the placeholder .project-media block with:
+           <div class="project-media"><img src="images/gozayan.png" alt="GoZayan flight booking screenshot"></div>
+      -->
+      <a class="project-card" href="https://github.com/argha-ghosh/Online-flight-ticket-booking-system" target="_blank" rel="noopener">
+        <div class="project-media project-media--placeholder">
+          <span class="placeholder-label">Add GoZayan screenshot</span>
+        </div>
+        <div class="project-content">
+          <div class="project-eyebrow">Flight Booking System</div>
+          <h3>GoZayan</h3>
+          <p>Multi-role flight reservation system with search, booking, cancellation, seat and pricing management, and QR-coded e-tickets for check-in.</p>
+          <div class="project-tags">
+            <span>PHP</span><span>MySQL</span><span>AJAX</span><span>JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 4: BHOJ
+           TO ADD YOUR OWN SCREENSHOT: replace the placeholder .project-media block with:
+           <div class="project-media"><img src="images/bhoj.png" alt="BHOJ desktop app screenshot"></div>
+      -->
+      <a class="project-card" href="https://github.com/argha-ghosh/BHOJ" target="_blank" rel="noopener">
+        <div class="project-media project-media--placeholder">
+          <span class="placeholder-label">Add BHOJ screenshot</span>
+        </div>
+        <div class="project-content">
+          <div class="project-eyebrow">Desktop Application</div>
+          <h3>BHOJ</h3>
+          <p>Windows Forms desktop app for restaurant food collection and distribution, with a relational schema in EF Core and full CRUD across entities.</p>
+          <div class="project-tags">
+            <span>C#</span><span>.NET 8.2</span><span>SQL Server</span><span>EF Core</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 5: FIFA Player Position Prediction
+           TO ADD YOUR OWN SCREENSHOT: replace the placeholder .project-media block with:
+           <div class="project-media"><img src="images/fifa-position-prediction.png" alt="FIFA player position prediction screenshot"></div>
+      -->
+      <a class="project-card" href="https://github.com/argha-ghosh/Data-Science/tree/main/Project" target="_blank" rel="noopener">
+        <div class="project-media project-media--placeholder">
+          <span class="placeholder-label">Add FIFA project screenshot</span>
+        </div>
+        <div class="project-content">
+          <div class="project-eyebrow">Machine Learning</div>
+          <h3>FIFA Player Position Prediction</h3>
+          <p>ML-based position classifier trained on 814 FIFA World Cup 2022 players — cleaned and engineered features (Goal-Assist Total, Defensive Total, Attack-Defense Ratio), then classified players into Defender, Midfielder, Forward, and Goalkeeper with a 500-tree Random Forest, evaluated via confusion matrix, accuracy, precision, recall, F1, and feature importance.</p>
+          <div class="project-tags">
+            <span>R</span><span>tidyverse</span><span>caret</span><span>randomForest</span><span>ggplot2</span>
+          </div>
+        </div>
+      </a>
+
     </div>
-    <div class="edu-item">
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Co-Curricular &amp; Achievements</h2>
       <div>
-        <div class="school">Azizul Haque College, Bogra</div>
-        <div class="degree">Higher Secondary Certificate, Science · GPA 5.0</div>
+        <p class="sub-label">Honors &amp; Recognition</p>
+        <p class="note">Recognition earned through academic presentations, technical projects, and coursework.</p>
       </div>
-      <div class="when">2021</div>
     </div>
-    <div class="cert-item">
-      <div>
-        <div class="cname">IT Essentials</div>
-        <div class="cdetail">Cisco Networking Academy · 70 hours</div>
+    <div class="achievements-grid">
+      <div class="achieve-card">
+        <p class="a-title">Perfect 5.00 GPA in Secondary School Certificate (SSC)</p>
+        <p class="a-org">Bogura Zilla School</p>
+        <p class="a-detail">Achieved the highest possible academic distinction (GPA 5.00) in the national board examinations under the Science group.</p>
       </div>
-      <div class="when">Jan – May 2023</div>
+      <div class="achieve-card">
+        <p class="a-title">Excellence in Higher Secondary Certificate (HSC)</p>
+        <p class="a-org">Govt. Azizul Haque College</p>
+        <p class="a-detail">Secured a perfect GPA of 5.00 out of 5.00 in the national board examination under the Science group.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -645,5 +770,32 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.project-card, .achieve-card');
+
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    targets.forEach(function (el) { el.classList.add('reveal', 'in-view'); });
+    return;
+  }
+
+  targets.forEach(function (el, i) {
+    el.classList.add('reveal');
+    el.style.transitionDelay = (i % 3) * 70 + 'ms';
+  });
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  targets.forEach(function (el) { observer.observe(el); });
+})();
+</script>
 </body>
 </html>
